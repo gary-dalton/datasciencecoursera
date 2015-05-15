@@ -9,4 +9,17 @@ corr <- function(directory, threshold = 0) {
     
     ## Return a numeric vector of correlations
     ## NOTE: Do not round the result!
+    
+    nob<-complete(directory)
+    u<-nob$nobs > threshold
+    
+    vcor<- NULL
+    for(value in nob$id[u]){
+        fname <- paste(sprintf("%03d", value), "csv", sep=".")
+        path<- paste(dir, fname, sep="/")
+        x<- read.csv(path)
+        vcor<- c(vcor, cor(x$sulfate, x$nitrate, use="complete"))
+    }
+    vcor
+    
 }
