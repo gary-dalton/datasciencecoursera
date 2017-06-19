@@ -34,15 +34,17 @@ rankall <- function(outcome, num = "best") {
     short<- data[, c(2,7,col)]
     stated<- split(short, short$State)
     
+    out<- data.frame(hospital= numeric(0), state = character(0), stringsAsFactors = FALSE)
     for( state in stated){
-        inorder<- state[order(state[,2], state[,1], decreasing=decreasing), ]
+        inorder<- state[order(state[,3], state[,1], decreasing=decreasing), ]
         if( nrow(inorder) < num ){
-            hosp<- "NA"
+            hosp<- c(NA, state[[1,2]])
         }else{
-            hosp<- inorder[num,c(1,2)]
+            hosp<- c(inorder[[num,1]], state[[1,2]])
         }
-        print(hosp)
+        out[state[[1,2]],]<- hosp
     }
+    out
     
     ## For each state, find the hospital of the given rank
     ## Return a data frame with the hospital names and the
